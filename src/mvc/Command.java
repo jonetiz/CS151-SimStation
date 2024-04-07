@@ -11,7 +11,7 @@ public class Command {
     public Command(Model model){
         this.model = model;
     }
-    public void execute() {
+    public void execute() throws Exception {
 
     }
 }
