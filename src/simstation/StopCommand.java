@@ -9,6 +9,7 @@ public class StopCommand extends Command {
     }
 
     public void execute() {
-
+        Simulation sim = (Simulation) model;
+        sim.stop();
     }
 }
