@@ -1,8 +1,12 @@
 package simstation;
 
 import java.util.*;
+import java.util.Timer;
+
 import mvc.*;
 import randomwalk.Drunk;
+
+import javax.swing.*;
 
 public abstract class Simulation extends Model {
 
@@ -74,11 +78,18 @@ public abstract class Simulation extends Model {
 
     public Agent getNeighbor(Agent a, double radius) {
         int rand = Utilities.rng.nextInt(agents.size());
-        for (Agent b : agents) {
+        int i = 0;
+        while (i < agents.size()) {
+            Agent b = agents.get(rand);
             if (distance(a, b) < radius && b.getPartner() == null) { // need to check this assumption in real time
                 a.updatePartner(b);
                 b.updatePartner(a);
             }
+            rand++;
+            if (rand >= agents.size()) {
+                rand = 0;
+            }
+            i++;
         }
         return null;
     }
@@ -89,5 +100,13 @@ public abstract class Simulation extends Model {
         public void run() {
             clock++;
         }
+    }
+
+    /*public String stats() {
+        return "#agents = " + agents.size() + "\n" + "clock = " + clock + "\n";
+    }*/
+
+    public void stats() {
+        changed();
     }
 }

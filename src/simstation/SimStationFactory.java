@@ -17,18 +17,40 @@ public abstract class SimStationFactory implements AppFactory {
     }
 
     public String[] getHelp() {
-        return new String[0];
+        return new String[] {
+                "Click Start to start simulation",
+                "Click Suspend to pause simulation",
+                "Click Stop to stop simulation",
+                "Click Stats to show sim info"
+        };
     }
 
     public String about() {
-        return null;
+        return "Simulation version 1.0";
     }
 
     public String[] getEditCommands() {
-        return new String[0];
+        return new String[] {"Start","Suspend","Resume","Stop","Stats"};
     }
 
     public Command makeEditCommand(Model model, String type, Object source) {
-        return null;
-    }
+        if (type.equalsIgnoreCase("Start")) {
+            return new StartCommand(model);
+        }
+        else if (type.equalsIgnoreCase("Suspend")) {
+            return new SuspendCommand(model);
+        }
+        else if (type.equalsIgnoreCase("Resume")) {
+            return new ResumeCommand(model);
+        }
+        else if (type.equalsIgnoreCase("Stop")) {
+            return new StopCommand(model);
+        }
+        else if (type.equalsIgnoreCase("Stats")) {
+            return new StatsCommand(model);
+        }
+        else {
+            return null;
+        }
+    };
 }
