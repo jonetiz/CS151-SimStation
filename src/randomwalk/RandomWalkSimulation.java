@@ -11,6 +11,7 @@ public class RandomWalkSimulation extends Simulation {
     public RandomWalkSimulation() {
         super();
     }
+
     public void populate() throws Exception {
         for(int i = 0; i < 15; i++)
             addAgent(new Drunk());
