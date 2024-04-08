@@ -1,11 +1,12 @@
 package simstation;
 
-import mvc.Utilities;
+import mvc.Publisher;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
-public abstract class Agent implements Serializable, Runnable {
+import static java.lang.Thread.sleep;
+
+public abstract class Agent extends Publisher implements Serializable, Runnable {
     private String name;
     protected Heading heading;
     private int xc;
@@ -40,7 +41,7 @@ public abstract class Agent implements Serializable, Runnable {
                 onInterrupted();
                 onExit();
                 update();
-                Thread.sleep(1000);
+                sleep(1000);
                 checkSuspended();
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -69,16 +70,18 @@ public abstract class Agent implements Serializable, Runnable {
 
     public void updateCoordinates() {
         // update xc, yc
+
     }
 
-    public synchronized void move(int steps) {
+    public synchronized void move(int steps) throws InterruptedException {
         for (int i=0;i<steps;i++) {
             updateCoordinates();
             world.changed();
+            sleep(20);
         }
     }
 
-    public void setSimulation(Simulation simulation) {
+    public synchronized void setSimulation(Simulation simulation) {
         this.world = simulation;
     }
 
@@ -113,11 +116,14 @@ public abstract class Agent implements Serializable, Runnable {
         return yc;
     }
 
-    public void updatePartner(Agent partner) {
+    /*public synchronized void updatePartner(Agent partner) {
         this.partner = partner;
-    }
+    }*/
 
-    public Agent getPartner() {
+    public synchronized void setPartner() {
+        this.partner = world.getNeighbor(this, 10);
+    }
+    public synchronized Agent showPartner() {
         return this.partner;
     }
 }

@@ -38,6 +38,7 @@ public abstract class Simulation extends Model {
 
         for (Agent agent : agents) {
             agent.start();
+            changed();
         }
 
         // wait for agents to die
@@ -56,18 +57,21 @@ public abstract class Simulation extends Model {
     public void suspend() {
         for (Agent agent : agents) {
             agent.suspend();
+            changed();
         }
     }
 
     public void resume() {
         for (Agent agent : agents) {
             agent.resume();
+            changed();
         }
     }
 
     public void stop() {
         for (Agent agent : agents) {
             agent.stop();
+            changed();
         }
     }
 
@@ -81,9 +85,8 @@ public abstract class Simulation extends Model {
         int i = 0;
         while (i < agents.size()) {
             Agent b = agents.get(rand);
-            if (distance(a, b) < radius && b.getPartner() == null) { // need to check this assumption in real time
-                a.updatePartner(b);
-                b.updatePartner(a);
+            if (a != b && distance(a, b) < radius && b.showPartner() == null) { // need to check this assumption in real time
+                return b;
             }
             rand++;
             if (rand >= agents.size()) {
