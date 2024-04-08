@@ -3,7 +3,7 @@ package simstation;
 import mvc.Utilities;
 
 public class Heading {
-    private int degrees;
+    protected int degrees;
     public Heading() {
         this.degrees = Utilities.rng.nextInt(360);
     }

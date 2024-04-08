@@ -37,10 +37,12 @@ public abstract class Simulation extends Model {
         populate();
 
         for (Agent agent : agents) {
+            System.out.println(agent.getName());
             agent.start();
+            //agent.run();
             changed();
         }
-
+        /*
         // wait for agents to die
         for (Agent agent : agents) {
             try {
@@ -52,6 +54,8 @@ public abstract class Simulation extends Model {
             }
         }
         System.out.println("all done");
+
+         */
     }
 
     public void suspend() {

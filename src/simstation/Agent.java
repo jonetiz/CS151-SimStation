@@ -1,6 +1,7 @@
 package simstation;
 
 import mvc.Publisher;
+import mvc.Utilities;
 
 import java.io.Serializable;
 
@@ -21,8 +22,8 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         this.name = name;
         Heading.random();
         myThread = null;
-        xc = 0;
-        yc = 0;
+        xc = Utilities.rng.nextInt(500);
+        yc = Utilities.rng.nextInt(500);;
     }
 
     public synchronized void join() throws InterruptedException {
@@ -70,7 +71,8 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public void updateCoordinates() {
         // update xc, yc
-
+        this.xc = (int) (xc + Math.sin(heading.degrees));
+        this.yc = (int) (yc + Math.cos(heading.degrees));
     }
 
     public synchronized void move(int steps) throws InterruptedException {

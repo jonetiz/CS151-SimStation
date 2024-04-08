@@ -25,7 +25,7 @@ public class SimulationView extends View implements Subscriber {
         for (Agent agent : sim.agents) {
             gc.setColor(Color.BLUE);
             Color oldColor = gc.getColor();
-            gc.fillArc(agent.getXc(),agent.getYc(),10,10,-30,30);
+            gc.fillOval(agent.getXc(),agent.getYc(),10,10);
             gc.setColor(oldColor);
         }
 
