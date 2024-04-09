@@ -9,6 +9,7 @@ public class ResumeCommand extends Command {
     }
 
     public void execute() {
-
+        Simulation sim = (Simulation) model;
+        sim.resume();
     }
 }
