@@ -1,6 +1,8 @@
 package randomwalk;
 
 import mvc.AppPanel;
+import simstation.Agent;
+import simstation.SimStationFactory;
 import simstation.Simulation;
 import simstation.SimulationPanel;
 

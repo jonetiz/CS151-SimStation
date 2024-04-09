@@ -26,14 +26,6 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         yc = Utilities.rng.nextInt(500);;
     }
 
-    public synchronized void join() throws InterruptedException {
-        try {
-            if (myThread != null) myThread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public synchronized void run() {
         myThread = Thread.currentThread(); // catch my thread
         System.out.println("running...");
@@ -62,9 +54,16 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     }
 
+    public synchronized void join() throws InterruptedException {
+        try {
+            if (myThread != null) myThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public synchronized void resume() {
         notify();
-        //notifyAll();
     }
 
     public synchronized void stop() {
@@ -75,24 +74,8 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public void updateCoordinates() {
         // update xc, yc
-        System.out.println("heading.degrees: " + this.heading.degrees);
-        double var10001 = Math.PI * (double)this.heading.degrees;
-        System.out.println("Math.sin(Math.PI * heading.degrees / 180): " + Math.sin(var10001 / 180.0));
-        var10001 = Math.PI * (double)this.heading.degrees;
-        System.out.println("Math.cos(Math.PI * heading.degrees / 180): " + Math.cos(var10001 / 180.0));
-        double newXc = Math.sin(Math.PI * (double)this.heading.degrees / 180.0);
-        double newYc = Math.cos(Math.PI * (double)this.heading.degrees / 180.0);
-        if (newXc > 0.0) {
-            this.xc = (int)Math.ceil(newXc + 0.5);
-        } else {
-            this.xc = (int)Math.floor(newXc);
-        }
-
-        if (newYc > 0.0) {
-            this.yc = (int)Math.ceil(newYc + 0.5);
-        } else {
-            this.yc = (int)Math.floor(newYc);
-        }
+        this.xc = (int) (xc + Math.sin(heading.degrees));
+        this.yc = (int) (yc + Math.cos(heading.degrees));
     }
 
     public synchronized void move(int steps) throws InterruptedException {

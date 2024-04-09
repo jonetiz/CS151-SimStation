@@ -1,12 +1,7 @@
 package simstation;
 
 import java.util.*;
-import java.util.Timer;
-
 import mvc.*;
-import randomwalk.Drunk;
-
-import javax.swing.*;
 
 public abstract class Simulation extends Model {
 
@@ -14,9 +9,7 @@ public abstract class Simulation extends Model {
     private int clock = 0;
     protected List<Agent> agents;
 
-    public Simulation() {
-        agents = new ArrayList<>();
-    }
+    public Simulation() { agents = new ArrayList<>(); }
 
     private void startTimer() {
         timer = new Timer();
@@ -34,7 +27,6 @@ public abstract class Simulation extends Model {
     }
 
     public void start() throws Exception {
-        startTimer();
         populate();
 
         for (Agent agent : agents) {
