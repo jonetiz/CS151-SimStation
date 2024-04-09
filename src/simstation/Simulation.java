@@ -12,7 +12,7 @@ public abstract class Simulation extends Model {
 
     transient private Timer timer; // timers aren't serializable
     private int clock = 0;
-    protected List<Agent> agents;
+    public List<Agent> agents;
 
     public Simulation() {
         agents = new ArrayList<>();
