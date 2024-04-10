@@ -23,7 +23,6 @@ public class RandomWalkSimulation extends Simulation {
         super.addAgent(drunk);
     }
 
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
