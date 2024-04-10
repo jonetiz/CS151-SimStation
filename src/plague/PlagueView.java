@@ -5,7 +5,7 @@ import simstation.Agent;
 import simstation.SimulationView;
 
 import java.awt.*;
-
+/* need to fix the error in plague.agents
 public class PlagueView extends SimulationView {
     private PlagueSimulation plague;
     public PlagueView(Model model) {
@@ -27,3 +27,4 @@ public class PlagueView extends SimulationView {
 
     }
 }
+*/

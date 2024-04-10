@@ -3,9 +3,12 @@ package simstation;
 import mvc.Publisher;
 import mvc.Utilities;
 
+import javax.swing.*;
 import java.io.Serializable;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
+import static javax.swing.SwingUtilities.isEventDispatchThread;
 
 public abstract class Agent extends Publisher implements Serializable, Runnable {
     private String name;
@@ -13,41 +16,53 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     private int xc;
     private int yc;
     private boolean suspended = false;
+    public synchronized boolean isStopped() { return stopped; }
     private boolean stopped = false;
+    public synchronized boolean isSuspended() { return suspended;  }
     transient protected Thread myThread;
     private Simulation world;
     private Agent partner = null;
 
     public Agent(String name) throws Exception {
         this.name = name;
-        Heading.random();
+        heading = Heading.random();
         myThread = null;
         xc = Utilities.rng.nextInt(500);
         yc = Utilities.rng.nextInt(500);;
     }
 
-    public synchronized void join() throws InterruptedException {
-        try {
-            if (myThread != null) myThread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public synchronized void run() {
         myThread = Thread.currentThread(); // catch my thread
-        while(!stopped) {
-            try {
-                onStart();
-                onInterrupted();
-                onExit();
-                update();
-                sleep(1000);
-                checkSuspended();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        //System.out.println("running...");
+        SwingWorker sw1 = new SwingWorker() {
+            @Override
+            protected String doInBackground() throws Exception {
+                while(!stopped) {
+                    try {
+                        onStart();
+                        onInterrupted();
+                        update();
+                        Thread.sleep(1000);
+                        checkSuspended();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return "Finished Execution";
             }
-        }
+
+            @Override
+            protected void process(List chunks) {
+                super.process(chunks);
+            }
+
+            @Override
+            protected void done() {
+                super.done();
+            }
+        };
+        sw1.execute();
+        onExit();
     }
 
     public synchronized void start() {
@@ -57,6 +72,14 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public synchronized void suspend() {
         suspended = true;
+    }
+
+    public synchronized void join() throws InterruptedException {
+        try {
+            if (myThread != null) myThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public synchronized void resume() {
@@ -69,15 +92,14 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public abstract void update() throws Exception;
 
-    public void updateCoordinates() {
-        // update xc, yc
-        this.xc = (int) (xc + Math.sin(heading.degrees));
-        this.yc = (int) (yc + Math.cos(heading.degrees));
-    }
-
     public synchronized void move(int steps) throws InterruptedException {
+        int originalXc = this.xc;
+        int originalYc = this.yc;
         for (int i=0;i<steps;i++) {
-            updateCoordinates();
+            double newXc = (i+1) * Math.sin(Math.PI * (double)this.heading.degrees / 180.0);
+            double newYc = (i+1) * Math.cos(Math.PI * (double)this.heading.degrees / 180.0);
+            this.xc = originalXc + (int) newXc;
+            this.yc = originalYc + (int) newYc;
             world.changed();
             sleep(20);
         }
@@ -88,14 +110,11 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     }
 
     // wait for notification if I'm not stopped and I am suspended
-    private synchronized void checkSuspended() {
-        try {
-            while(!stopped && suspended) {
-                wait();
-                suspended = false;
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    private synchronized void checkSuspended() throws InterruptedException {
+        System.out.println(myThread.getName());
+        if(!stopped && suspended) {
+            wait();
+            suspended = false;
         }
     }
 

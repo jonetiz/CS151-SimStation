@@ -4,7 +4,7 @@ import mvc.Utilities;
 import simstation.Agent;
 import simstation.Simulation;
 import simstation.SimulationPanel;
-
+/*
 public class PlagueSimulation extends Simulation {
     public static int VIRULENCE = 50;
     public static int RESISTANCE = 2;
@@ -33,3 +33,4 @@ public class PlagueSimulation extends Simulation {
         panel.display();
     }
 }
+*/
