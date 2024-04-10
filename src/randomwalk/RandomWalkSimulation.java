@@ -6,6 +6,8 @@ import simstation.SimStationFactory;
 import simstation.Simulation;
 import simstation.SimulationPanel;
 
+import javax.swing.*;
+
 public class RandomWalkSimulation extends Simulation {
     //private int size = 15;
     public RandomWalkSimulation() {
@@ -23,8 +25,13 @@ public class RandomWalkSimulation extends Simulation {
 
 
     public static void main(String[] args) {
-        AppPanel panel = new SimulationPanel(new RandomWalkFactory());
-        panel.display();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                AppPanel panel = new SimulationPanel(new RandomWalkFactory());
+                panel.display();
+            }
+        });
     }
 
 }

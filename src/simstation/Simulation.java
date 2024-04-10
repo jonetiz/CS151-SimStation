@@ -1,7 +1,11 @@
 package simstation;
 
 import java.util.*;
+import java.util.Timer;
+
 import mvc.*;
+
+import javax.swing.*;
 
 public abstract class Simulation extends Model {
 
@@ -27,28 +31,15 @@ public abstract class Simulation extends Model {
     }
 
     public void start() throws Exception {
+        startTimer();
         populate();
 
         for (Agent agent : agents) {
             System.out.println(agent.getName());
             agent.start();
-            //agent.run();
             changed();
         }
-        /*
-        // wait for agents to die
-        for (Agent agent : agents) {
-            try {
-                agent.join();
-            } catch (InterruptedException ie) {
-                System.err.println(ie.getMessage());
-            } finally {
-                System.out.println(agent.getName() + " has died");
-            }
-        }
-        System.out.println("all done");
 
-         */
     }
 
     public void suspend() {
@@ -64,7 +55,6 @@ public abstract class Simulation extends Model {
             agent.resume();
             changed();
         }
-        notifyAll();
     }
 
     public void stop() {
@@ -73,14 +63,27 @@ public abstract class Simulation extends Model {
             changed();
         }
         stopTimer();
+
+        // wait for agents to die
+        for (Agent agent : agents) {
+            try {
+                agent.join();
+            } catch (InterruptedException ie) {
+                System.err.println(ie.getMessage());
+            } finally {
+                System.out.println(agent.getName() + " has died");
+            }
+        }
+        System.out.println("all done");
+        changed();
     }
 
-    private double distance(Agent a, Agent b) {
+    private synchronized double distance(Agent a, Agent b) {
         return Math.sqrt((a.getXc() - b.getXc()) * (a.getXc() - b.getXc()) +
                 (a.getYc() - b.getYc()) * (a.getYc() - b.getYc()));
     }
 
-    public Agent getNeighbor(Agent a, double radius) {
+    public synchronized Agent getNeighbor(Agent a, double radius) {
         int rand = Utilities.rng.nextInt(agents.size());
         int i = 0;
         while (i < agents.size()) {
