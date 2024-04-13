@@ -15,13 +15,6 @@ public class RandomWalkView extends SimulationView {
 
     @Override
     public void update() {
-        /*SwingWorker sw2 = new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-
-                return null;
-            }
-        }*/
         super.update();
         StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
         StackTraceElement traceElement = stacktrace[4];
