@@ -8,11 +8,6 @@ import mvc.View;
 public abstract class SimStationFactory implements AppFactory {
     public abstract Model makeModel();
     public abstract String getTitle();
-
-    //public View makeView(Model model) {
-        //return new SimulationView(model);
-    //}
-
     public abstract View makeView(Model model);
 
     public String[] getHelp() {
