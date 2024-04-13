@@ -73,11 +73,14 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     public synchronized void move(int steps) throws InterruptedException {
         int originalXc = this.xc;
         int originalYc = this.yc;
+        int frameSize = 500;
         for (int i=0;i<steps;i++) {
             double newXc = (i+1) * Math.sin(Math.PI * (double)this.heading.degrees / 180.0);
             double newYc = (i+1) * Math.cos(Math.PI * (double)this.heading.degrees / 180.0);
             this.xc = originalXc + (int) newXc;
             this.yc = originalYc + (int) newYc;
+            this.xc = ((this.xc % frameSize) + frameSize) % frameSize; // to make agent appear inside of view frame
+            this.yc = ((this.yc % frameSize) + frameSize) % frameSize;
             world.changed();
             sleep(20);
         }
