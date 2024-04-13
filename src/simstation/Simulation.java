@@ -15,6 +15,12 @@ public abstract class Simulation extends Model {
 
     public Simulation() { agents = new ArrayList<>(); }
 
+    public void init() throws Exception {
+        agents.clear();
+        clock = 0;
+        changed();
+    }
+
     private void startTimer() {
         timer = new Timer();
         timer.scheduleAtFixedRate(new ClockUpdater(), 1000, 1000);
@@ -31,8 +37,9 @@ public abstract class Simulation extends Model {
     }
 
     public void start() throws Exception {
-        startTimer();
+        init();
         populate();
+        startTimer();
 
         for (Agent agent : agents) {
             System.out.println(agent.getName());
@@ -57,12 +64,11 @@ public abstract class Simulation extends Model {
         }
     }
 
-    public void stop() {
+    public void stop() throws Exception {
         for (Agent agent : agents) {
             agent.stop();
             changed();
         }
-        stopTimer();
 
         // wait for agents to die
         for (Agent agent : agents) {
@@ -75,7 +81,8 @@ public abstract class Simulation extends Model {
             }
         }
         System.out.println("all done");
-        changed();
+        stopTimer();
+        init();
     }
 
     private synchronized double distance(Agent a, Agent b) {
@@ -114,5 +121,15 @@ public abstract class Simulation extends Model {
 
     public void stats() {
         changed();
+        //JOptionPane.showMessageDialog(null,
+                //"#agents = " + agents.size() + "\n" + "clock = " + clock + "\n");
+    }
+
+    public List<Agent> getAgents() {
+        return agents;
+    }
+
+    public int getClock() {
+        return clock;
     }
 }

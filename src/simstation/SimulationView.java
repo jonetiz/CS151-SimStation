@@ -28,7 +28,6 @@ public class SimulationView extends View implements Subscriber {
             gc.fillOval(agent.getXc(),agent.getYc(),10,10);
             gc.setColor(oldColor);
         }
-
     }
 
 
