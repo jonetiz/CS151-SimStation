@@ -15,13 +15,13 @@ public class RandomWalkSimulation extends Simulation {
     }
 
     public void populate() throws Exception {
-        for(int i = 0; i < 15; i++)
+        for(int i = 0; i < 30; i++)
             addAgent(new Drunk());
     }
 
-    public void addAgent(Drunk drunk) {
-        super.addAgent(drunk);
-    }
+    //public void addAgent(Drunk drunk) {
+        //super.addAgent(drunk);
+    //}
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

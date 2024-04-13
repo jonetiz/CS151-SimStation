@@ -6,6 +6,8 @@ import mvc.Utilities;
 import javax.swing.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static java.lang.Thread.sleep;
 import static javax.swing.SwingUtilities.isEventDispatchThread;
@@ -22,6 +24,7 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     transient protected Thread myThread;
     private Simulation world;
     private Agent partner = null;
+    private ExecutorService executor;
 
     public Agent(String name) throws Exception {
         this.name = name;
@@ -33,39 +36,14 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public synchronized void run() {
         myThread = Thread.currentThread(); // catch my thread
-        //System.out.println("running...");
-        SwingWorker sw1 = new SwingWorker() {
-            @Override
-            protected String doInBackground() throws Exception {
-                while(!stopped) {
-                    try {
-                        onStart();
-                        onInterrupted();
-                        update();
-                        Thread.sleep(1000);
-                        checkSuspended();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                return "Finished Execution";
-            }
-
-            @Override
-            protected void process(List chunks) {
-                super.process(chunks);
-            }
-
-            @Override
-            protected void done() {
-                super.done();
-            }
-        };
-        sw1.execute();
+        SwingWorkerSubclass sw = new SwingWorkerSubclass();
+        executor.submit(sw);
+        sw.execute();
         onExit();
     }
 
     public synchronized void start() {
+        this.executor = Executors.newFixedThreadPool(world.getAgents().size());
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -147,4 +125,34 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     public synchronized Agent showPartner() {
         return this.partner;
     }
+
+    class SwingWorkerSubclass extends SwingWorker<Void, Void> {
+        @Override
+        protected Void doInBackground() throws Exception {
+            while(!stopped) {
+                try {
+                    onStart();
+                    onInterrupted();
+                    update(); // update the business logic
+                    Thread.sleep(1000);
+                    if (SwingUtilities.isEventDispatchThread()) {
+                        System.out.println("Is event dispatch thread 3");
+                    }
+
+                    synchronized (this) {
+                        /*if (SwingUtilities.isEventDispatchThread()) {
+                            System.out.println("Is event dispatch thread 3");
+                        }*/
+                        checkSuspended();
+                    }
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return null;
+        }
+
+    }
+
 }

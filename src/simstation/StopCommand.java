@@ -8,7 +8,7 @@ public class StopCommand extends Command {
         super(model);
     }
 
-    public void execute() {
+    public void execute() throws Exception {
         Simulation sim = (Simulation) model;
         sim.stop();
     }
