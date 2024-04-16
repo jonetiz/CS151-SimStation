@@ -10,11 +10,15 @@ public class PlagueSimulation extends Simulation {
     public static int RESISTANCE = 2;
 
     @Override
-    public void populate() throws Exception {
+    public void populate() {
         for(int i = 0; i < 50; i++) {
             boolean infected = Utilities.rng.nextFloat() * 100 > VIRULENCE;
             addAgent(new Host(infected));
         }
+    }
+
+    public String[] getStats() {
+        return new String[]{" #agents = " + getAgents().size(), "clock = " + getClock(), "% infected = " + getInfected()};
     }
 
     public Double getInfected() {

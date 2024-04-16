@@ -33,7 +33,7 @@ public class AppPanel extends JPanel implements ActionListener {
         cp.add(this);
         frame.setJMenuBar(this.createMenuBar());
         frame.setTitle(factory.getTitle());
-        frame.setSize(1200, 800);
+        frame.setSize(1200, 550);
     }
 
     protected JMenuBar createMenuBar() {
@@ -90,7 +90,7 @@ public class AppPanel extends JPanel implements ActionListener {
         }
     }
 
-    protected class ControlPanel extends JPanel {
+    protected static class ControlPanel extends JPanel {
         public ControlPanel() {
 
         }

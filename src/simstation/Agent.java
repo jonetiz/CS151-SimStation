@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import static java.lang.Thread.sleep;
 
 public abstract class Agent extends Publisher implements Serializable, Runnable {
-    private String name;
+    private final String name;
     protected Heading heading;
     private int xc;
     private int yc;
@@ -50,11 +50,11 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         suspended = true;
     }
 
-    public synchronized void join() throws InterruptedException {
+    public synchronized void join() {
         try {
             if (myThread != null) myThread.join();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -95,11 +95,14 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     }
 
     // wait for notification if I'm not stopped and I am suspended
-    private synchronized void checkSuspended() throws InterruptedException {
-        System.out.println(myThread.getName());
-        if(!stopped && suspended) {
-            wait();
-            suspended = false;
+    private synchronized void checkSuspended() {
+        try {
+            while(!stopped && suspended) {
+                wait();
+                suspended = false;
+            }
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -126,10 +129,10 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         this.partner = partner;
     }*/
 
-    public synchronized void setPartner() {
-        this.partner = world.getNeighbor(this, 10);
+    public synchronized void setPartner(int radius) {
+        this.partner = world.getNeighbor(this, radius);
     }
-    public synchronized Agent showPartner() {
+    public synchronized Agent getPartner() {
         return this.partner;
     }
 
@@ -141,15 +144,12 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
                     onStart();
                     onInterrupted();
                     update(); // update the business logic
-                    Thread.sleep(500);
+                    Thread.sleep(1000); // allow time for all threads to sync
                     if (SwingUtilities.isEventDispatchThread()) {
                         System.out.println("Is event dispatch thread 3");
                     }
 
                     synchronized (this) {
-                        /*if (SwingUtilities.isEventDispatchThread()) {
-                            System.out.println("Is event dispatch thread 3");
-                        }*/
                         checkSuspended();
                     }
 

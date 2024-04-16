@@ -1,8 +1,6 @@
 package randomwalk;
 
 import mvc.AppPanel;
-import simstation.Agent;
-import simstation.SimStationFactory;
 import simstation.Simulation;
 import simstation.SimulationPanel;
 
@@ -19,13 +17,14 @@ public class RandomWalkSimulation extends Simulation {
             addAgent(new Drunk());
     }
 
+    public String[] getStats() {
+        return new String[]{" #agents = " + getAgents().size(), "clock = " + getClock()};
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                AppPanel panel = new SimulationPanel(new RandomWalkFactory());
-                panel.display();
-            }
+        SwingUtilities.invokeLater(() -> {
+            AppPanel panel = new SimulationPanel(new RandomWalkFactory());
+            panel.display();
         });
     }
 

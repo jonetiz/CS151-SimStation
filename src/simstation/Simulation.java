@@ -72,8 +72,6 @@ public abstract class Simulation extends Model {
         for (Agent agent : agents) {
             try {
                 agent.join();
-            } catch (InterruptedException ie) {
-                System.err.println(ie.getMessage());
             } finally {
                 System.out.println(agent.getName() + " has died");
             }
@@ -128,8 +126,10 @@ public abstract class Simulation extends Model {
         return "#agents = " + agents.size() + "\n" + "clock = " + clock + "\n";
     }*/
 
+    public abstract String[] getStats();
+
     public void stats() {
-        changed();
+        Utilities.inform(getStats());
         //JOptionPane.showMessageDialog(null,
                 //"#agents = " + agents.size() + "\n" + "clock = " + clock + "\n");
     }

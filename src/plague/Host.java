@@ -19,8 +19,8 @@ public class Host extends Agent {
         int steps = Utilities.rng.nextInt(10) + 1;
         move(steps);
         if (infected) {
-            setPartner();
-            Host p = (Host)showPartner();
+            setPartner(25);
+            Host p = (Host)getPartner();
             if (p == null) return; // stop if we dont have a partner
             if (Utilities.rng.nextFloat() * 100 > PlagueSimulation.VIRULENCE) {
                 // if we roll in favor of infection
