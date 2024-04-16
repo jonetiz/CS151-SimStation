@@ -4,28 +4,25 @@ import mvc.Utilities;
 import simstation.Agent;
 import simstation.Simulation;
 import simstation.SimulationPanel;
-/*
+
 public class PlagueSimulation extends Simulation {
     public static int VIRULENCE = 50;
     public static int RESISTANCE = 2;
 
     @Override
     public void populate() throws Exception {
-        for(int i = 0; i < 50; i++)
-            addAgent(new Host());
-    }
-
-    @Override
-    public void stats() {
-        Utilities.inform(new String[]{"#agents = " + agents.size(), "clock = NIMP", "% infected = " + getInfected()});
+        for(int i = 0; i < 50; i++) {
+            boolean infected = Utilities.rng.nextFloat() * 100 > VIRULENCE;
+            addAgent(new Host(infected));
+        }
     }
 
     public Double getInfected() {
         int i = 0;
         for (Agent a : agents) {
             if (((Host)a).infected) i++;
-        };
-        return (double) (i / agents.size());
+        }
+        return (double) i / agents.size() * 100;
     }
 
     public static void main(String[] args) {
@@ -33,4 +30,3 @@ public class PlagueSimulation extends Simulation {
         panel.display();
     }
 }
-*/

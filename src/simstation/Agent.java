@@ -5,12 +5,10 @@ import mvc.Utilities;
 
 import javax.swing.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static java.lang.Thread.sleep;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
 
 public abstract class Agent extends Publisher implements Serializable, Runnable {
     private String name;
@@ -26,12 +24,12 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     private Agent partner = null;
     private ExecutorService executor;
 
-    public Agent(String name) throws Exception {
+    public Agent(String name) {
         this.name = name;
         heading = Heading.random();
         myThread = null;
         xc = Utilities.rng.nextInt(500);
-        yc = Utilities.rng.nextInt(500);;
+        yc = Utilities.rng.nextInt(500);
     }
 
     public synchronized void run() {
@@ -74,9 +72,15 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         int originalXc = this.xc;
         int originalYc = this.yc;
         int frameSize = 500;
+        int degrees = 0;
+        switch (heading) {
+            case SOUTH -> degrees = 180;
+            case EAST -> degrees = 270;
+            case WEST -> degrees = 90;
+        }
         for (int i=0;i<steps;i++) {
-            double newXc = (i+1) * Math.sin(Math.PI * (double)this.heading.degrees / 180.0);
-            double newYc = (i+1) * Math.cos(Math.PI * (double)this.heading.degrees / 180.0);
+            double newXc = (i + 1) * Math.sin(Math.PI * (double) degrees / 180.0);
+            double newYc = (i + 1) * Math.cos(Math.PI * (double) degrees / 180.0);
             this.xc = originalXc + (int) newXc;
             this.yc = originalYc + (int) newYc;
             this.xc = ((this.xc % frameSize) + frameSize) % frameSize; // to make agent appear inside of view frame
@@ -131,13 +135,13 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     class SwingWorkerSubclass extends SwingWorker<Void, Void> {
         @Override
-        protected Void doInBackground() throws Exception {
+        protected Void doInBackground() {
             while(!stopped) {
                 try {
                     onStart();
                     onInterrupted();
                     update(); // update the business logic
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                     if (SwingUtilities.isEventDispatchThread()) {
                         System.out.println("Is event dispatch thread 3");
                     }

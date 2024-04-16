@@ -5,8 +5,6 @@ import java.util.Timer;
 
 import mvc.*;
 
-import javax.swing.*;
-
 public abstract class Simulation extends Model {
 
     transient private Timer timer; // timers aren't serializable
@@ -15,7 +13,7 @@ public abstract class Simulation extends Model {
 
     public Simulation() { agents = new ArrayList<>(); }
 
-    public void init() throws Exception {
+    public void init() {
         agents.clear();
         clock = 0;
         changed();
@@ -64,7 +62,7 @@ public abstract class Simulation extends Model {
         }
     }
 
-    public void stop() throws Exception {
+    public void stop() {
         for (Agent agent : agents) {
             agent.stop();
             changed();
@@ -90,19 +88,30 @@ public abstract class Simulation extends Model {
                 (a.getYc() - b.getYc()) * (a.getYc() - b.getYc()));
     }
 
-    public synchronized Agent getNeighbor(Agent a, double radius) {
-        int rand = Utilities.rng.nextInt(agents.size());
-        int i = 0;
-        while (i < agents.size()) {
-            Agent b = agents.get(rand);
-            if (a != b && distance(a, b) < radius && b.showPartner() == null) { // need to check this assumption in real time
-                return b;
+    public synchronized Agent getNeighbor(Agent a, double radius) { // get a random agent in the radius
+//        int rand = Utilities.rng.nextInt(agents.size());
+//        int i = 0;
+//        while (i < agents.size()) {
+//            Agent b = agents.get(rand);
+//            if (a != b && distance(a, b) < radius) { // need to check this assumption in real time
+//                return b;
+//            }
+//            rand++;
+//            if (rand >= agents.size()) {
+//                rand = 0;
+//            }
+//            i++;
+//        }
+//        return null;
+        List<Agent> eligibleAgents = new ArrayList<>();
+        for (Agent b : agents) {
+            if (a != b && distance(a, b) < radius) {
+                eligibleAgents.add(b);
             }
-            rand++;
-            if (rand >= agents.size()) {
-                rand = 0;
-            }
-            i++;
+        }
+        if (!eligibleAgents.isEmpty()) {
+            int rand = Utilities.rng.nextInt(eligibleAgents.size());
+            return eligibleAgents.get(rand);
         }
         return null;
     }

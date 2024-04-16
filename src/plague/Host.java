@@ -5,11 +5,12 @@ import simstation.Agent;
 import simstation.Heading;
 
 public class Host extends Agent {
-    public boolean infected = false;
+    public boolean infected;
 
-    public Host() throws Exception {
+    public Host(boolean infected) {
         super("");
         heading = Heading.random();
+        this.infected = infected;
     }
 
     @Override
@@ -17,6 +18,18 @@ public class Host extends Agent {
         heading = Heading.random();
         int steps = Utilities.rng.nextInt(10) + 1;
         move(steps);
+        if (infected) {
+            setPartner();
+            Host p = (Host)showPartner();
+            if (p == null) return; // stop if we dont have a partner
+            if (Utilities.rng.nextFloat() * 100 > PlagueSimulation.VIRULENCE) {
+                // if we roll in favor of infection
+                if (Utilities.rng.nextFloat() * 100 > PlagueSimulation.RESISTANCE) {
+                    // if we roll in favor of defeating the resistance
+                    p.infected = true;
+                }
+            }
+        }
     }
 
     @Override
