@@ -34,6 +34,7 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
 
     public synchronized void run() {
         myThread = Thread.currentThread(); // catch my thread
+        checkSuspended();
         SwingWorkerSubclass sw = new SwingWorkerSubclass();
         executor.submit(sw);
         sw.execute();

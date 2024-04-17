@@ -3,6 +3,7 @@ package flocking;
 import mvc.Model;
 import mvc.View;
 import simstation.SimStationFactory;
+import simstation.SimulationView;
 
 public class FlockingFactory extends SimStationFactory {
 
@@ -14,5 +15,5 @@ public class FlockingFactory extends SimStationFactory {
         return "SimStation Flocking";
     }
 
-    public View makeView(Model model) { return new FlockingView(model); }
+    public View makeView(Model model) { return new SimulationView(model); }
 }

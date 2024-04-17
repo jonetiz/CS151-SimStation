@@ -19,6 +19,10 @@ public class AppPanel extends JPanel implements ActionListener {
     protected ControlPanel controlPanel;
     protected JFrame frame;
 
+    public void setModel(Model m) {
+        this.model = m;
+    }
+
     public AppPanel(AppFactory factory){
         this.factory = factory;
         model = factory.makeModel();
