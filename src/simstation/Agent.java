@@ -73,15 +73,9 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
         int originalXc = this.xc;
         int originalYc = this.yc;
         int frameSize = 500;
-        int degrees = 0;
-        switch (heading) {
-            case SOUTH -> degrees = 180;
-            case EAST -> degrees = 270;
-            case WEST -> degrees = 90;
-        }
         for (int i=0;i<steps;i++) {
-            double newXc = (i + 1) * Math.sin(Math.PI * (double) degrees / 180.0);
-            double newYc = (i + 1) * Math.cos(Math.PI * (double) degrees / 180.0);
+            double newXc = (i+1) * Math.sin(Math.PI * (double)this.heading.degrees / 180.0);
+            double newYc = (i+1) * Math.cos(Math.PI * (double)this.heading.degrees / 180.0);
             this.xc = originalXc + (int) newXc;
             this.yc = originalYc + (int) newYc;
             this.xc = ((this.xc % frameSize) + frameSize) % frameSize; // to make agent appear inside of view frame
