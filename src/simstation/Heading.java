@@ -2,7 +2,9 @@ package simstation;
 
 import mvc.Utilities;
 
-public class Heading {
+import java.io.Serializable;
+
+public class Heading implements Serializable {
     protected int degrees;
     public Heading() {
         this.degrees = Utilities.rng.nextInt(360);

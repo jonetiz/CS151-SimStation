@@ -6,16 +6,14 @@ import simstation.SimulationView;
 import java.awt.*;
 
 public class PlagueView extends SimulationView {
-    private final PlagueSimulation plague;
     public PlagueView(Model model) {
         super(model);
-        plague = (PlagueSimulation) model;
     }
 
     public void paintComponent(Graphics gc) {
         super.paintComponent(gc);
 
-        for (Agent agent : plague.getAgents()) {
+        for (Agent agent : sim.getAgents()) {
             if (((Host) agent).infected) {
                 gc.setColor(Color.RED);
             } else {

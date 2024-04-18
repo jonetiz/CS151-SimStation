@@ -20,7 +20,9 @@ public class AppPanel extends JPanel implements ActionListener {
     protected JFrame frame;
 
     public void setModel(Model m) {
-        this.model = m;
+        model = m;
+        view.setModel(m);
+        model.changed();
     }
 
     public AppPanel(AppFactory factory){
@@ -72,17 +74,18 @@ public class AppPanel extends JPanel implements ActionListener {
                 }
                 case "Open" -> {
                     try {
-                        model = Utilities.open(model);
-                        if (model != null) {
-                            view.setModel(model);
-                        }
+                        Model newModel = Utilities.open(model);
+                        if (newModel != null) setModel(newModel);
                     } catch (Exception ex) {
                         Utilities.inform("ERROR: Didn't load any file, potentially due to an error.");
                     }
                 }
                 case "New" -> {
-                    model = factory.makeModel();
-                    view.setModel(model);
+                    Utilities.saveChanges(model);
+                    setModel(factory.makeModel());
+
+                    // needed cuz setModel sets to true:
+                    model.setUnsavedChanges(false);
                 }
                 case "Quit" -> System.exit(0);
                 case "About" -> Utilities.inform(factory.about());

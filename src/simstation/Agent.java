@@ -22,7 +22,7 @@ public abstract class Agent extends Publisher implements Serializable, Runnable 
     transient protected Thread myThread;
     private Simulation world;
     private Agent partner = null;
-    private ExecutorService executor;
+    transient private ExecutorService executor;
 
     public Agent(String name) {
         this.name = name;

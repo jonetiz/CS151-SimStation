@@ -1,6 +1,5 @@
 package prisonersDilemma;
 
-import flocking.FlockingFactory;
 import simstation.Agent;
 import simstation.Simulation;
 import simstation.SimulationPanel;
@@ -10,7 +9,7 @@ public class PrisonerSimulation extends Simulation {
     public void populate() throws Exception {
         for (int i = 0; i < 40; i++){
             if (i < 10){
-                addAgent(new Prisoner(new Cooperate(), "Cooperater"));
+                addAgent(new Prisoner(new Cooperate(), "Cooperator"));
             }
             else if (i < 20){
                 addAgent(new Prisoner(new Cheat(), "Cheater"));
@@ -38,7 +37,7 @@ public class PrisonerSimulation extends Simulation {
         for(Agent a:agents){
             if(a.getName().contains("Cheater")){
                 cheaterAverage += ((Prisoner)a).getFitness();
-            }else if(a.getName().contains("Cooperater")) {
+            }else if(a.getName().contains("Cooperator")) {
                 cooperaterAverage += ((Prisoner) a).getFitness();
             }else if(a.getName().contains("Random")) {
                 randomCooperaterAverage += ((Prisoner) a).getFitness();
@@ -51,7 +50,7 @@ public class PrisonerSimulation extends Simulation {
         randomCooperaterAverage = randomCooperaterAverage/10;
         tit4TaterAverage = tit4TaterAverage/10;
 
-        return new String[]{"Cheater Average Fitness " + cheaterAverage, "Cooperater Average Fitness " + cooperaterAverage, "Random Cooperater Average Fitness " +  randomCooperaterAverage, "Tit4Tater Average Fitness " + tit4TaterAverage};
+        return new String[]{"Cheater Average Fitness " + cheaterAverage, "Cooperator Average Fitness " + cooperaterAverage, "Random Cooperator Average Fitness " +  randomCooperaterAverage, "Tit4Tater Average Fitness " + tit4TaterAverage};
     }
 
     public static void main(String[] args) {

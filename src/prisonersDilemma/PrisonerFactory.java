@@ -3,6 +3,7 @@ package prisonersDilemma;
 import mvc.Model;
 import mvc.View;
 import simstation.SimStationFactory;
+import simstation.SimulationView;
 
 public class PrisonerFactory extends SimStationFactory {
     @Override
@@ -17,6 +18,6 @@ public class PrisonerFactory extends SimStationFactory {
 
     @Override
     public View makeView(Model model) {
-        return new PrisonerView(model);
+        return new SimulationView(model);
     }
 }

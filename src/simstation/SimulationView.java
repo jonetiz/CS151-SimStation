@@ -7,16 +7,17 @@ import mvc.View;
 import java.awt.*;
 
 public class SimulationView extends View implements Subscriber {
-    private Simulation sim;
+    protected Simulation sim;
     //private List<AgentView> agentViews;
     public SimulationView(Model model) {
         super(model);
         sim = (Simulation) model;
-
     }
 
-    public void update() {
-        super.update();
+    @Override
+    public void setModel(Model newModel) {
+        super.setModel(newModel);
+        sim = (Simulation) newModel;
     }
 
     public void paintComponent(Graphics gc) {

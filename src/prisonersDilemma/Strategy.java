@@ -1,6 +1,8 @@
 package prisonersDilemma;
 
-abstract class Strategy {
+import java.io.Serializable;
+
+abstract class Strategy implements Serializable {
     protected Prisoner myPrisoner;
     public abstract boolean cooperate();
 

@@ -1,37 +1,39 @@
 package simstation;
 
-import mvc.AppFactory;
 import mvc.AppPanel;
+import mvc.Model;
 
 import javax.swing.*;
 
 public class SimulationPanel extends AppPanel {
-
-    private JButton start;
-    private JButton suspend;
-    private JButton resume;
-    private JButton stop;
-    private JButton stats;
+    @Override
+    public void setModel(Model m) {
+        super.setModel(m);
+        Simulation s = (Simulation)m;
+        for (Agent a : s.agents) {
+            a.start();
+        }
+    }
 
     public SimulationPanel(SimStationFactory factory) {
         super(factory);
-        start = new JButton("Start");
+        JButton start = new JButton("Start");
         start.addActionListener(this);
         controlPanel.add(start);
 
-        suspend = new JButton("Suspend");
+        JButton suspend = new JButton("Suspend");
         suspend.addActionListener(this);
         controlPanel.add(suspend);
 
-        resume = new JButton("Resume");
+        JButton resume = new JButton("Resume");
         resume.addActionListener(this);
         controlPanel.add(resume);
 
-        stop = new JButton("Stop");
+        JButton stop = new JButton("Stop");
         stop.addActionListener(this);
         controlPanel.add(stop);
 
-        stats = new JButton("Stats");
+        JButton stats = new JButton("Stats");
         stats.addActionListener(this);
         controlPanel.add(stats);
     }

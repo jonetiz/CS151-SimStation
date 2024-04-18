@@ -48,6 +48,7 @@ public abstract class Simulation extends Model {
     }
 
     public void suspend() {
+        stopTimer();
         for (Agent agent : agents) {
             agent.suspend();
             changed();
@@ -56,6 +57,7 @@ public abstract class Simulation extends Model {
     }
 
     public void resume() {
+        startTimer();
         for (Agent agent : agents) {
             agent.resume();
             changed();

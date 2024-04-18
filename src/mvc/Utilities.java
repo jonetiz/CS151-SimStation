@@ -1,6 +1,5 @@
 package mvc;
 
-import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.Random;
@@ -88,7 +87,6 @@ public class Utilities {
             fName = getFileName(fName, false);
             model.setFileName(fName);
         }
-        System.out.println(fName);
         try {
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fName));
             model.setUnsavedChanges(false);
